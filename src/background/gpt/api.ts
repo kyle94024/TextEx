@@ -8,7 +8,7 @@ const openai = new OpenAI({
 
 export default async function gpt_api(
   prompt: string,
-  text: string,
+  text: string = '',
   temperature: number = 0.9,
 ): Promise<string | any> {
   const params: OpenAI.Chat.CompletionCreateParams = {
@@ -28,3 +28,5 @@ export default async function gpt_api(
     return completion
   }
 }
+
+export { gpt_api }

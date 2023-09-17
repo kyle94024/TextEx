@@ -3,9 +3,11 @@
 import OpenAI from 'openai'
 import { ChatCompletion, ChatCompletionChunk } from 'openai/resources/chat/completions'
 import { Stream } from 'openai/streaming'
+import { gpt_api } from './gpt/api'
+import { SUMMARIZE_PROMPT } from './gpt/prompts/summarize'
 
 // Function to create chrome context menu for GPT Actions
-async function createContextMenu() {
+async function createContextMenu(): Promise<void> {
   // Create main context menu to add submenu to
   const mainContextMenu = await chrome.contextMenus.create({
     documentUrlPatterns: ['<all_urls>'],
@@ -15,7 +17,7 @@ async function createContextMenu() {
   })
 
   // For loop to create submenu items, creates listener for each submenu item
-  const actions = ['summarize', 'explain', 'replace']
+  const actions = ['summarize', 'explain']
   for (const action of actions) {
     const actionCM = await chrome.contextMenus.create({
       documentUrlPatterns: ['<all_urls>'],
@@ -62,12 +64,11 @@ async function processMenuClick(
   switch (info.menuItemId) {
     case 'summarizeCM':
       console.log(info.selectionText)
+      console.log(await gpt_api(SUMMARIZE_PROMPT, info.selectionText))
       break
     case 'explainCM':
       console.log(info.selectionText)
-      break
-    case 'replaceCM':
-      console.log(info.selectionText)
+      // console.log(await gpt_api(EXPLAIN_PROMPT, info.selectionText))
       break
     default:
       console.error('Invalid menu item ID passed to processMenuClick', info.menuItemId)
