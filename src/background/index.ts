@@ -5,6 +5,7 @@ import { ChatCompletion, ChatCompletionChunk } from 'openai/resources/chat/compl
 import { Stream } from 'openai/streaming'
 import { gpt_api } from './gpt/api'
 import { SUMMARIZE_PROMPT } from './gpt/prompts/summarize'
+import { LAYIFY_PROMPT } from './gpt/prompts/lay-ify'
 
 // Function to create chrome context menu for GPT Actions
 async function createContextMenu(): Promise<void> {
@@ -13,11 +14,11 @@ async function createContextMenu(): Promise<void> {
     documentUrlPatterns: ['<all_urls>'],
     contexts: ['all'],
     id: 'mainCM',
-    title: 'PubMedGPT', //change later
+    title: 'TextEx', //change later
   })
 
   // For loop to create submenu items, creates listener for each submenu item
-  const actions = ['summarize', 'explain']
+  const actions = ['summarize', 'Lay-ify']
   for (const action of actions) {
     const actionCM = await chrome.contextMenus.create({
       documentUrlPatterns: ['<all_urls>'],
@@ -39,24 +40,6 @@ chrome.runtime.onInstalled.addListener(async () => {
   await createContextMenu()
 })
 
-chrome.action.onClicked.addListener(async (tab) => {
-  if (tab.url?.startsWith('chrome://')) return undefined
-  if (tab.url?.startsWith('https://pubmed.ncbi.nlm.nih.gov/')) {
-    // chrome.scripting.executeScript({
-    //   target: {tabId: tab.id},
-    //   files: ['content-script.js']
-    // });
-  }
-  if (tab.url?.startsWith('https://www.ncbi.nlm.nih.gov/pmc/articles/')) {
-    if (tab.id) {
-      const response = await chrome.tabs.sendMessage(tab.id, {
-        action: 'getSelectedText',
-      })
-      console.log(response)
-    }
-  }
-})
-
 async function processMenuClick(
   info: chrome.contextMenus.OnClickData,
   tab: chrome.tabs.Tab | undefined,
@@ -64,11 +47,11 @@ async function processMenuClick(
   switch (info.menuItemId) {
     case 'summarizeCM':
       console.log(info.selectionText)
-      console.log(await gpt_api(SUMMARIZE_PROMPT, info.selectionText))
+      //console.log(await gpt_api(SUMMARIZE_PROMPT, info.selectionText))
       break
-    case 'explainCM':
+    case 'Lay-ifyCM':
       console.log(info.selectionText)
-      // console.log(await gpt_api(EXPLAIN_PROMPT, info.selectionText))
+      console.log(await gpt_api(LAYIFY_PROMPT, info.selectionText))
       break
     default:
       console.error('Invalid menu item ID passed to processMenuClick', info.menuItemId)

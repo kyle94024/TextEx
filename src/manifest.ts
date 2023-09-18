@@ -1,19 +1,19 @@
 import { defineManifest } from '@crxjs/vite-plugin'
 
 export default defineManifest({
-  name: 'create-chrome-ext',
+  name: 'TextEx',
   description: '',
-  version: '0.0.0',
+  version: '1.0.0',
   manifest_version: 3,
   icons: {
-    '16': 'img/logo-16.png',
-    '32': 'img/logo-34.png',
-    '48': 'img/logo-48.png',
-    '128': 'img/logo-128.png',
+    '16': 'img/textexlogo-16.png',
+    '32': 'img/textexlogo-32.png',
+    '48': 'img/textexlogo-48.png',
+    '128': 'img/textexlogo-128.png',
   },
   action: {
     default_popup: 'popup.html',
-    default_icon: 'img/logo-48.png',
+    default_icon: 'img/textexlogo.jpg',
   },
   options_page: 'options.html',
   background: {
