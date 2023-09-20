@@ -29,6 +29,7 @@ export default defineConfig(({ mode }) => {
         inDir: 'build',
         // @ts-ignore
         outFileName: `${manifest.short_name ?? manifest.name.replaceAll(' ', '-')}-extension-v${
+          // @ts-ignore
           manifest.version
         }.zip`,
       }),
