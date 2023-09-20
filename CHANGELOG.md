@@ -13,3 +13,7 @@ Summary
 
 - feat: initial
 - feat: generator by ![create-chrome-ext](https://www.npmjs.com/package/create-chrome-ext)
+
+## 1.0.0 [2023.09.18]
+
+- feat: pre-mvp

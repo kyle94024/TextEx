@@ -1,6 +1,6 @@
-# textxx
+# TextEx
 
-> a chrome extension tools built with Vite + React, and Manifest v3
+> a chrome extension tool built with Vite + React, and Manifest v3
 
 ## Installing
 

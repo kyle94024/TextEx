@@ -20,15 +20,20 @@ export default defineManifest({
     service_worker: 'src/background/index.ts',
     type: 'module',
   },
-  content_scripts: [
-    {
-      matches: ['*://www.ncbi.nlm.nih.gov/pmc/articles/*'],
-      js: ['src/content/index.ts'],
-    },
-  ],
+  // content_scripts: [
+  //   {
+  //     matches: ['*://www.ncbi.nlm.nih.gov/pmc/articles/*'],
+  //     js: ['src/content/index.ts'],
+  //   },
+  // ],
   web_accessible_resources: [
     {
-      resources: ['img/logo-16.png', 'img/logo-34.png', 'img/logo-48.png', 'img/logo-128.png'],
+      resources: [
+        'img/textexlogo-16.png',
+        'img/textexlogo-32.png',
+        'img/textexlogo-48.png',
+        'img/textexlogo-128.png',
+      ],
       matches: [],
     },
   ],
