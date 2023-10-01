@@ -51,7 +51,9 @@ async function processMenuClick(
       break
     case 'Lay-ifyCM':
       console.log(info.selectionText)
-      console.log(await gpt_api(LAYIFY_PROMPT, info.selectionText))
+      const gptResponse = await gpt_api(LAYIFY_PROMPT, info.selectionText)
+
+      chrome.tabs.sendMessage(tab?.id ?? 0, { message: 'layify', text: gptResponse })
       break
     default:
       console.error('Invalid menu item ID passed to processMenuClick', info.menuItemId)

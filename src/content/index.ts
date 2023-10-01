@@ -1,62 +1,50 @@
-let selectedText = ''
-
-function handleSelectedText() {
-  if (window) selectedText = window.getSelection()!.toString().trim()
-}
-
-document.addEventListener('mouseup', handleSelectedText)
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'getSelectedText') {
-    sendResponse(selectedText)
-  }
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  console.log(sender.tab ? 'from a content script:' + sender.tab.url : 'from the extension')
+  if (request.message === 'layify') createPopup(request.text)
 })
 
-function countElements() {
-  const elements = document.querySelectorAll('*')
-  return elements.length
+function createPopup(gptData: string) {
+  // This functions creates the draggable popup on the chrome tab with the gpt data
+
+  console.log('creating the popup')
+
+  // <div id="layify-popup" style="position: fixed; ">gptData</div>
+
+  const popup = document.createElement('div')
+  popup.id = 'layify-popup'
+  popup.style.position = 'fixed'
+  popup.style.top = '0'
+  popup.style.right = '0'
+  popup.style.width = '300px'
+  popup.style.height = '100vh'
+  popup.style.backgroundColor = 'white'
+  popup.style.zIndex = '1000'
+  popup.style.borderLeft = '1px solid black'
+  popup.style.borderTop = '1px solid black'
+  popup.style.borderBottom = '1px solid black'
+  popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)'
+  popup.style.overflow = 'scroll'
+  popup.style.padding = '10px'
+  popup.innerText = gptData
+
+  const closeButton = document.createElement('button')
+  closeButton.id = 'layify-close-button'
+  closeButton.style.position = 'absolute'
+  closeButton.style.top = '0'
+  closeButton.style.right = '0'
+  closeButton.style.width = '30px'
+  closeButton.style.height = '30px'
+  closeButton.style.backgroundColor = 'red'
+  closeButton.style.border = 'none'
+  closeButton.style.borderRadius = '50%'
+  closeButton.style.color = 'white'
+  closeButton.style.fontSize = '20px'
+  closeButton.style.fontWeight = 'bold'
+  closeButton.innerText = 'X'
+
+  closeButton.addEventListener('click', () => {
+    popup.remove()
+  })
+  popup.appendChild(closeButton)
+  document.body.appendChild(popup)
 }
-
-function displayElementCount() {
-  const elementCount = countElements()
-  console.log(`Number of elements in the Full Article DOM: ${elementCount}`)
-}
-
-displayElementCount() // Call the function to display the count
-//jig-ncbiinpagenav
-
-// content-script.js
-function extractTextRecursively(element: HTMLElement) {
-  let extractedText = ''
-
-  for (const child of element.children) {
-    if (child.tagName === 'P' || child.tagName.startsWith('H')) {
-      //extractedText += child.textContent.trim() + "\n";
-      extractedText += '\n' + child.textContent
-    } else {
-      extractedText += extractTextRecursively(child as HTMLElement)
-    }
-  }
-  console.log(extractedText)
-  return extractedText
-}
-
-function extractTextFromPage() {
-  const mainContent = document.querySelector('.jig-ncbiinpagenav')!.cloneNode(true) as HTMLElement // Replace with appropriate selector
-  if (!mainContent) {
-    return 'Article not found'
-  }
-
-  const extractedText = extractTextRecursively(mainContent)
-  return extractedText
-}
-
-// content-script.js
-function isTextHighlighted() {
-  const selection = window.getSelection()
-  return !selection!.isCollapsed // Returns true if text is highlighted, false otherwise
-}
-
-console.log('Extracted Text:', extractTextFromPage())
-
-export {}

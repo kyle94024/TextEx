@@ -20,12 +20,12 @@ export default defineManifest({
     service_worker: 'src/background/index.ts',
     type: 'module',
   },
-  // content_scripts: [
-  //   {
-  //     matches: ['*://www.ncbi.nlm.nih.gov/pmc/articles/*'],
-  //     js: ['src/content/index.ts'],
-  //   },
-  // ],
+  content_scripts: [
+    {
+      matches: ['<all_urls>'],
+      js: ['src/content/index.ts'],
+    },
+  ],
   web_accessible_resources: [
     {
       resources: [
