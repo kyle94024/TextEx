@@ -3,6 +3,16 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.message === 'layify') createPopup(request.text)
 })
 
+import interact from 'interactjs'
+
+let mouseX = 0
+let mouseY = 0
+document.addEventListener('mousemove', (event) => {
+  mouseX = event.clientX
+  mouseY = event.clientY
+  console.log(`Mouse position: (${mouseX}, ${mouseY})`)
+})
+
 function createPopup(gptData: string) {
   // This functions creates the draggable popup on the chrome tab with the gpt data
 
@@ -10,41 +20,39 @@ function createPopup(gptData: string) {
 
   // <div id="layify-popup" style="position: fixed; ">gptData</div>
 
-  const popup = document.createElement('div')
-  popup.id = 'layify-popup'
-  popup.style.position = 'fixed'
-  popup.style.top = '0'
-  popup.style.right = '0'
-  popup.style.width = '300px'
-  popup.style.height = '100vh'
-  popup.style.backgroundColor = 'white'
-  popup.style.zIndex = '1000'
-  popup.style.borderLeft = '1px solid black'
-  popup.style.borderTop = '1px solid black'
-  popup.style.borderBottom = '1px solid black'
-  popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)'
-  popup.style.overflow = 'scroll'
-  popup.style.padding = '10px'
-  popup.innerText = gptData
+  // this finds the position of the mouse and creates a popup at that position
 
-  const closeButton = document.createElement('button')
-  closeButton.id = 'layify-close-button'
-  closeButton.style.position = 'absolute'
-  closeButton.style.top = '0'
-  closeButton.style.right = '0'
-  closeButton.style.width = '30px'
-  closeButton.style.height = '30px'
-  closeButton.style.backgroundColor = 'red'
-  closeButton.style.border = 'none'
-  closeButton.style.borderRadius = '50%'
-  closeButton.style.color = 'white'
-  closeButton.style.fontSize = '20px'
-  closeButton.style.fontWeight = 'bold'
-  closeButton.innerText = 'X'
+  // this creates a draggable popup using tailwindcss functions that displays the gptData passed in
+  const draggableBox = document.createElement('div')
+  draggableBox.id = 'draggable'
+  draggableBox.className = 'absolute w-32 h-32 bg-blue-500 p-4 cursor-move'
+  draggableBox.style.left = `${mouseX}px`
+  draggableBox.style.top = `${mouseY}px`
+  // draggableBox.style.left = '0px' // Initial left position
+  // draggableBox.style.top = '0px' // Initial top position
+  document.body.appendChild(draggableBox)
 
-  closeButton.addEventListener('click', () => {
-    popup.remove()
-  })
-  popup.appendChild(closeButton)
-  document.body.appendChild(popup)
+  // Create the text inside the draggable box
+  const text = document.createElement('p')
+  text.textContent = 'Drag me!'
+  text.className = 'text-white'
+  draggableBox.appendChild(text)
+
+  // Initialize the draggable interaction using interact.js
+  interact(draggableBox)
+    .draggable({
+      inertia: true, // Enable inertia for smooth dragging
+    })
+    .on('dragmove', (event) => {
+      // Update the element's position based on the drag event
+      const target = event.target
+
+      // Calculate new position
+      const x = parseFloat(target.style.left || '0') + event.dx
+      const y = parseFloat(target.style.top || '0') + event.dy
+
+      // Set the new position
+      target.style.left = x + 'px'
+      target.style.top = y + 'px'
+    })
 }

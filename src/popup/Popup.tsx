@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './Popup.css'
+import * as React from 'react'
 
 function App() {
   const [crx, setCrx] = useState('create-chrome-ext')
