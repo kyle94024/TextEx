@@ -10,7 +10,7 @@ let mouseY = 0
 document.addEventListener('mousemove', (event) => {
   mouseX = event.clientX
   mouseY = event.clientY
-  console.log(`Mouse position: (${mouseX}, ${mouseY})`)
+  //console.log(`Mouse position: (${mouseX}, ${mouseY})`)
 })
 
 function createPopup(gptData: string) {
@@ -25,9 +25,11 @@ function createPopup(gptData: string) {
   // this creates a draggable popup using tailwindcss functions that displays the gptData passed in
   const draggableBox = document.createElement('div')
   draggableBox.id = 'draggable'
-  draggableBox.className = 'absolute w-32 h-32 bg-blue-500 p-4 cursor-move'
+  draggableBox.className = 'relative w-32 h-32 bg-blue-500 p-4 cursor-move'
   draggableBox.style.left = `${mouseX}px`
   draggableBox.style.top = `${mouseY}px`
+  // draggableBox.style.left = `0px`
+  // draggableBox.style.top = `0px`
   // draggableBox.style.left = '0px' // Initial left position
   // draggableBox.style.top = '0px' // Initial top position
   document.body.appendChild(draggableBox)
@@ -35,7 +37,7 @@ function createPopup(gptData: string) {
   // Create the text inside the draggable box
   const text = document.createElement('p')
   text.textContent = 'Drag me!'
-  text.className = 'text-blue'
+  text.className = 'text-black'
   draggableBox.appendChild(text)
 
   // Initialize the draggable interaction using interact.js
