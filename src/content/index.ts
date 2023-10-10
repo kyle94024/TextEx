@@ -35,7 +35,7 @@ function createPopup(gptData: string) {
   // Create the text inside the draggable box
   const text = document.createElement('p')
   text.textContent = 'Drag me!'
-  text.className = 'text-white'
+  text.className = 'text-blue'
   draggableBox.appendChild(text)
 
   // Initialize the draggable interaction using interact.js
