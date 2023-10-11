@@ -2,10 +2,6 @@
 
 TextEx - A Chrome extension tool for turning text into layperson language.
 
-## Introduction<a name="introduction"></a>
-
-TextEx is a Chrome extension tool that allows users to understand any text using the "Lay-ify", "Explain", and "Summary" tools. The aim of the project is to provide laypersons a powerful and flexible tool to understand jargon-filled and expert-level text easily, whether for personal or professional use.
-
 ## Technologies<a name="technologies"></a>
 
 TextEx is built using the following technologies:
@@ -18,6 +14,10 @@ TextEx is built using the following technologies:
 - Chat-GPT 3.5 Turbo
 - TailwindCSS
 - Vite
+
+## Introduction<a name="introduction"></a>
+
+TextEx is a Chrome extension tool that allows users to understand any text using the "Lay-ify", "Explain", and "Summary" tools. The aim of the project is to provide laypersons a powerful and flexible tool to understand jargon-filled and expert-level text easily, whether for personal or professional use.
 
 ## Launch<a name="launch"></a>
 
