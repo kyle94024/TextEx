@@ -16,45 +16,65 @@ document.addEventListener('mousemove', (event) => {
 function createPopup(gptData: string) {
   // This functions creates the draggable popup on the chrome tab with the gpt data
 
-  console.log('creating the popup')
+  // let mouseX = 0
+  // let mouseY = 0
+  // document.addEventListener('mousemove', (event) => {
+  //   mouseX = event.clientX
+  //   mouseY = event.clientY
+  // })
+  // console.log('creating the popup')
 
-  // <div id="layify-popup" style="position: fixed; ">gptData</div>
+  function createDraggableWindow() {
+    // Create the draggable window container
 
-  // this finds the position of the mouse and creates a popup at that position
+    const windowContainer = document.createElement('div')
+    windowContainer.style.position = 'fixed'
+    windowContainer.style.top = '0'
+    windowContainer.style.left = '0'
+    windowContainer.style.width = '100vw'
+    windowContainer.style.height = '100vh'
+    windowContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.5)' // Semi-transparent black color
+    windowContainer.style.zIndex = '9999' // Adjust the z-index to make sure it appears on top
 
-  // this creates a draggable popup using tailwindcss functions that displays the gptData passed in
-  const draggableBox = document.createElement('div')
-  draggableBox.id = 'draggable'
-  draggableBox.className = 'relative w-32 h-32 bg-blue-500 p-4 cursor-move'
-  draggableBox.style.left = `${mouseX}px`
-  draggableBox.style.top = `${mouseY}px`
-  // draggableBox.style.left = `0px`
-  // draggableBox.style.top = `0px`
-  // draggableBox.style.left = '0px' // Initial left position
-  // draggableBox.style.top = '0px' // Initial top position
-  document.body.appendChild(draggableBox)
+    document.body.appendChild(windowContainer)
 
-  // Create the text inside the draggable box
-  const text = document.createElement('p')
-  text.textContent = 'Drag me!'
-  text.className = 'text-black'
-  draggableBox.appendChild(text)
+    // Create the draggable window
+    const draggableWindow = document.createElement('div')
+    draggableWindow.id = 'draggable'
+    draggableWindow.className = 'relative bg-red-500 rounded-lg shadow-lg p-6 cursor-move'
+    draggableWindow.style.width = '100px'
+    draggableWindow.style.height = '100px'
+    windowContainer.appendChild(draggableWindow)
 
-  // Initialize the draggable interaction using interact.js
-  interact(draggableBox)
-    .draggable({
-      inertia: true, // Enable inertia for smooth dragging
-    })
-    .on('dragmove', (event) => {
-      // Update the element's position based on the drag event
-      const target = event.target
+    // Create the window title
+    const title = document.createElement('h1')
+    title.className = 'text-lg font-bold mb-4'
+    title.textContent = 'Draggable Window'
+    draggableWindow.appendChild(title)
 
-      // Calculate new position
-      const x = parseFloat(target.style.left || '0') + event.dx
-      const y = parseFloat(target.style.top || '0') + event.dy
+    // Create the window content
+    const content = document.createElement('p')
+    content.textContent = 'Hello, world!'
+    draggableWindow.appendChild(content)
 
-      // Set the new position
-      target.style.left = x + 'px'
-      target.style.top = y + 'px'
-    })
+    // Initialize the draggable interaction using interact.js
+    interact(draggableWindow)
+      .draggable({
+        inertia: true, // Enable inertia for smooth dragging
+      })
+      .on('dragmove', (event) => {
+        // Update the element's position based on the drag event
+        const target = event.target
+
+        // Calculate new position
+        const x = parseFloat(target.style.left || '0') + event.dx
+        const y = parseFloat(target.style.top || '0') + event.dy
+
+        // Set the new position
+        target.style.left = x + 'px'
+        target.style.top = y + 'px'
+      })
+  }
+
+  createDraggableWindow()
 }
