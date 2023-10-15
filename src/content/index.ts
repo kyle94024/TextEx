@@ -1,3 +1,5 @@
+import '../css/index.css'
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(sender.tab ? 'from a content script:' + sender.tab.url : 'from the extension')
   if (request.message === 'layify') createPopup(request.text)
@@ -26,6 +28,9 @@ function createPopup(gptData: string) {
 
   function createDraggableWindow() {
     // Create the draggable window container
+    const host = document.createElement('div')
+    const shadow = host.attachShadow({ mode: 'open' })
+    document.body.appendChild(host)
 
     const windowContainer = document.createElement('div')
     windowContainer.style.position = 'fixed'
@@ -36,7 +41,7 @@ function createPopup(gptData: string) {
     windowContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.5)' // Semi-transparent black color
     windowContainer.style.zIndex = '9999' // Adjust the z-index to make sure it appears on top
 
-    document.body.appendChild(windowContainer)
+    shadow.appendChild(windowContainer)
 
     // Create the draggable window
     const draggableWindow = document.createElement('div')
