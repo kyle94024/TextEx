@@ -14,19 +14,8 @@ document.addEventListener('mousemove', (event) => {
 })
 
 function createPopup(gptData: string) {
-  // This functions creates the draggable popup on the chrome tab with the gpt data
-
-  // let mouseX = 0
-  // let mouseY = 0
-  // document.addEventListener('mousemove', (event) => {
-  //   mouseX = event.clientX
-  //   mouseY = event.clientY
-  // })
-  // console.log('creating the popup')
-
   function createDraggableWindow() {
     // Create the draggable window container
-
     const windowContainer = document.createElement('div')
     windowContainer.style.position = 'fixed'
     windowContainer.style.top = '0'
@@ -40,21 +29,19 @@ function createPopup(gptData: string) {
 
     // Create the draggable window
     const draggableWindow = document.createElement('div')
-    draggableWindow.id = 'draggable'
-    draggableWindow.className = 'relative bg-red-500 rounded-lg shadow-lg p-6 cursor-move'
-    draggableWindow.style.width = '100px'
-    draggableWindow.style.height = '100px'
+    draggableWindow.id = 'draggableElement'
+    draggableWindow.style.position = 'absolute'
+    draggableWindow.style.width = '200px'
+    draggableWindow.style.height = '200px'
+    draggableWindow.style.backgroundColor = 'white'
+    draggableWindow.style.border = '1px solid black'
+    draggableWindow.style.padding = '10px'
+    draggableWindow.style.cursor = 'move'
     windowContainer.appendChild(draggableWindow)
-
-    // Create the window title
-    const title = document.createElement('h1')
-    title.className = 'text-lg font-bold mb-4'
-    title.textContent = 'Draggable Window'
-    draggableWindow.appendChild(title)
 
     // Create the window content
     const content = document.createElement('p')
-    content.textContent = 'Hello, world!'
+    content.textContent = gptData
     draggableWindow.appendChild(content)
 
     // Initialize the draggable interaction using interact.js
@@ -78,3 +65,15 @@ function createPopup(gptData: string) {
 
   createDraggableWindow()
 }
+
+// const draggableElement = document.getElementById('draggableElement') as HTMLElement
+
+// function updatePosition() {
+//   // Manually set the position of the element
+//   const newX = mouseX // Specify your desired X-coordinate here
+//   const newY = mouseY // Specify your desired Y-coordinate here
+//   if (draggableElement) {
+//     draggableElement.style.left = newX + 'px'
+//     draggableElement.style.top = newY + 'px'
+//   }
+// }
