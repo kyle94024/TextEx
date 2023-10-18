@@ -1,6 +1,11 @@
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(sender.tab ? 'from a content script:' + sender.tab.url : 'from the extension')
-  if (request.message === 'layify') createPopup(request.text)
+  if (request.message === 'layify') {
+    createPopup(request.text, 'Layify: ')
+  }
+  if (request.message === 'summarize') {
+    createPopup(request.text, 'Summary: ')
+  }
 })
 
 import interact from 'interactjs'
@@ -13,16 +18,20 @@ document.addEventListener('mousemove', (event) => {
   //console.log(`Mouse position: (${mouseX}, ${mouseY})`)
 })
 
-function createPopup(gptData: string) {
+const viewportX = window.scrollX
+const viewportY = window.scrollY
+console.log(`Viewport position: (${viewportX}, ${viewportY})`)
+
+function createPopup(gptData: string, type: string) {
   function createDraggableWindow() {
     // Create the draggable window container
     const windowContainer = document.createElement('div')
-    windowContainer.style.position = 'fixed'
+    windowContainer.id = 'windowContainer'
+    windowContainer.style.position = 'absolute'
+    windowContainer.style.width = '100%'
     windowContainer.style.top = '0'
-    windowContainer.style.left = '0'
-    windowContainer.style.width = '100vw'
-    windowContainer.style.height = '100vh'
-    windowContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.5)' // Semi-transparent black color
+    windowContainer.style.height = '100%'
+    windowContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.25)' // Semi-transparent black color
     windowContainer.style.zIndex = '9999' // Adjust the z-index to make sure it appears on top
 
     document.body.appendChild(windowContainer)
@@ -31,15 +40,19 @@ function createPopup(gptData: string) {
     const draggableWindow = document.createElement('div')
     draggableWindow.id = 'draggableElement'
     draggableWindow.style.position = 'absolute'
-    draggableWindow.style.width = '200px'
-    draggableWindow.style.height = '200px'
-    draggableWindow.style.backgroundColor = 'white'
+    draggableWindow.style.width = '15rem'
+    draggableWindow.style.height = '25rem'
+    draggableWindow.style.backgroundColor = 'rgba(255, 255, 255, 0.80)'
     draggableWindow.style.border = '1px solid black'
     draggableWindow.style.padding = '10px'
     draggableWindow.style.cursor = 'move'
     windowContainer.appendChild(draggableWindow)
 
     // Create the window content
+    const title = document.createElement('p')
+    title.textContent = type
+    draggableWindow.appendChild(title)
+
     const content = document.createElement('p')
     content.textContent = gptData
     draggableWindow.appendChild(content)
