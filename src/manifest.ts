@@ -38,4 +38,5 @@ export default defineManifest({
     },
   ],
   permissions: ['scripting', 'activeTab', 'contextMenus'],
+  host_permissions: ['<all_urls>'],
 })

@@ -4,6 +4,30 @@ import { LAYIFY_PROMPT } from '../background/gpt/prompts/lay-ify'
 
 // This file contains the content script that is injected into the page (the DOM).
 // It listens for messages from the extension and creates the draggable window/popup.
+
+// track the number of popups created
+let numberOfPopupsCreated = 0
+
+function destructor() {
+  // Destruction is needed only once
+  document.removeEventListener(destructionEvent, destructor)
+  // Tear down content script: Unbind events, clear timers, restore DOM, etc.
+
+  // Remove the window containers
+  for (let i = 0; i < numberOfPopupsCreated; i++) {
+    const windowContainer = document.getElementById('windowContainer' + i)
+    if (windowContainer) {
+      document.body.removeChild(windowContainer)
+    }
+  }
+}
+
+var destructionEvent = 'destructmyextension_' + chrome.runtime.id
+// Unload previous content script if needed
+document.dispatchEvent(new CustomEvent(destructionEvent))
+document.addEventListener(destructionEvent, destructor)
+
+// Listens for messages from the extension
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(sender.tab ? 'from a content script:' + sender.tab.url : 'from the extension')
   if (request.message === 'layify') {
@@ -34,9 +58,6 @@ window.addEventListener('scroll', () => {
   viewportY = window.scrollY
   //console.log(`Viewport position: (${viewportX}, ${viewportY})`)
 })
-
-// track the number of popups created
-let numberOfPopupsCreated = 0
 
 // Create the draggable window
 function createPopup(gptData: string, type: string) {
@@ -149,32 +170,32 @@ function createPopup(gptData: string, type: string) {
     minimizeButtonText.style.fontWeight = 'bold'
     minimizeButton.appendChild(minimizeButtonText)
 
-    // Create the lay button if the type is "summarize"
-    if (type === 'summarize') {
-      const layButton = document.createElement('button')
-      layButton.style.position = 'absolute'
-      layButton.style.top = '5px'
-      layButton.style.left = '50px'
-      layButton.style.backgroundColor = 'rgb(230, 230, 255, 0.90)'
-      layButton.style.color = 'white'
-      layButton.style.border = 'none'
-      layButton.style.borderRadius = '5px'
-      layButton.style.width = '40px'
-      layButton.style.height = '22px'
-      layButton.style.fontSize = '10px'
-      layButton.style.fontWeight = 'bold'
-      layButton.style.cursor = 'pointer'
-      layButton.style.paddingTop = '1px'
-      layButton.textContent = 'Lay'
-      layButton.style.color = 'black'
-      draggableWindow.appendChild(layButton)
+    // // Create the lay button if the type is "summarize"
+    // if (type === 'summarize') {
+    //   const layButton = document.createElement('button')
+    //   layButton.style.position = 'absolute'
+    //   layButton.style.top = '5px'
+    //   layButton.style.left = '50px'
+    //   layButton.style.backgroundColor = 'rgb(230, 230, 255, 0.90)'
+    //   layButton.style.color = 'white'
+    //   layButton.style.border = 'none'
+    //   layButton.style.borderRadius = '5px'
+    //   layButton.style.width = '40px'
+    //   layButton.style.height = '22px'
+    //   layButton.style.fontSize = '10px'
+    //   layButton.style.fontWeight = 'bold'
+    //   layButton.style.cursor = 'pointer'
+    //   layButton.style.paddingTop = '1px'
+    //   layButton.textContent = 'Lay'
+    //   layButton.style.color = 'black'
+    //   draggableWindow.appendChild(layButton)
 
-      // // Add event listener for the lay button
-      // layButton.addEventListener('click', () => {
-      //   console.log('lay button clicked')
-      //   // generatePopup(content.textContent!)
-      // })
-    }
+    // // Add event listener for the lay button
+    // layButton.addEventListener('click', () => {
+    //   console.log('lay button clicked')
+    //   // generatePopup(content.textContent!)
+    // })
+    // }
     // Add event listener for the close button
     closeButton.addEventListener('click', () => {
       windowContainer.removeChild(draggableWindow)

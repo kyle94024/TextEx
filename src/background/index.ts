@@ -7,6 +7,18 @@ import { gpt_api } from './gpt/api'
 import { SUMMARIZE_PROMPT } from './gpt/prompts/summarize'
 import { LAYIFY_PROMPT } from './gpt/prompts/lay-ify'
 
+// Disconnect and reinject content script on install (for dev purposes)
+chrome.runtime.onInstalled.addListener(async () => {
+  for (const cs of chrome.runtime.getManifest().content_scripts) {
+    for (const tab of await chrome.tabs.query({ url: cs.matches })) {
+      chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        files: cs.js,
+      })
+    }
+  }
+})
+
 // Function to create chrome context menu for GPT Actions
 async function createContextMenu(): Promise<void> {
   // Create main context menu to add submenu to
