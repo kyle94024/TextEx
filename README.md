@@ -9,15 +9,13 @@ TextEx is built using the following technologies:
 - JavaScript
 - npm
 - TypeScript
-- React
 - Node
 - Chat-GPT 3.5 Turbo
-- TailwindCSS
 - Vite
 
 ## Introduction<a name="introduction"></a>
 
-TextEx is a Chrome extension tool that allows users to understand any text using the "Lay-ify", "Explain", and "Summary" tools. The aim of the project is to provide laypersons a powerful and flexible tool to understand jargon-filled and expert-level text easily, whether for personal or professional use.
+TextEx is a Chrome extension tool that allows users to understand any text using the "Lay-ify" and "Summary" tools. The aim of the project is to provide laypersons a powerful and flexible tool to understand jargon-filled and expert-level text easily, whether for personal or professional use.
 
 ## Launch<a name="launch"></a>
 
@@ -38,14 +36,13 @@ To launch TextEx, follow these steps:
 - [Scope of Functionalities](#scope-of-functionalities)
 - [Examples of Use](#examples-of-use)
 - [Project Status](#project-status)
-- [Sources](#sources)
+- [Future Features/Bugs Priority](#future)
 
 ## Scope of Functionalities<a name="scope-of-functionalities"></a>
 
-TextEx has three main tools:
+TextEx has two main tools:
 
 - Lay-ify
-- Explain
 - Summary
 
 ## Examples of Use<a name="examples-of-use"></a>
@@ -58,8 +55,33 @@ Here are some examples of how TextEx can be used:
 
 ## Project Status<a name="project-status"></a>
 
-TextEx is currently in active development, and is being sorta actively maybe not maintained and updated by the development team.
+TextEx is currently in active development, and is being sorta actively maybe not maintained and updated by me.
 
-## Sources<a name="sources"></a>
+## Future Features/Bugs Priority<a name="future"></a>
 
-TextEx is an open source project, and the source code is available on GitHub at https://github.com/kyle94024/TextEx.
+## Additional Features and Bugs
+
+Here are some additional features and bugs that can be added or fixed in TextEx:
+
+### Feature: Improved User Experience
+
+1. QOL, but very important for the older audience: After someone highlights the text, a little small button, that isn't in the way, should appear near the cursor which will have the option to lay or summarize (instead of having to open the context menu by right-clicking).
+
+### Bug: Console Errors
+
+2. There are usually some errors in the tab console that don't seem to critically affect performance, but maybe they do.
+
+### Feature: Text Conversion
+
+3. Create a button to layify the text from a summary, or vice versa. I have already tried implementing this, but have not yet figured out how.
+
+### Feature: Persistent Popups
+
+4. QOL. When closing a tab and reopening, stores previous text popups and can redisplay them.
+
+### Feature: Improved Visuals
+
+5. Graphic. Improve visuals using Tailwindcss or other means.
+
+
+
