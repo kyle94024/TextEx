@@ -9,6 +9,7 @@ import { LAYIFY_PROMPT } from '../background/gpt/prompts/lay-ify'
 let numberOfPopupsCreated = 0
 
 function destructor() {
+  // I do this because the content script errors when injected into the page twice
   // Destruction is needed only once
   document.removeEventListener(destructionEvent, destructor)
   // Tear down content script: Unbind events, clear timers, restore DOM, etc.
