@@ -71,17 +71,20 @@ Here are some additional features and bugs that can be added or fixed in TextEx:
 
 2. There are usually some errors in the tab console that don't seem to critically affect performance, but maybe they do.
 
+### Feature: Return to text
+3. When a popup appears, it can be freely dragged, yet what if the user wants to have it return to the relevant text, in case they lost track?
+
 ### Feature: Text Conversion
 
-3. Create a button to layify the text from a summary, or vice versa. I have already tried implementing this, but have not yet figured out how.
+4. Create a button to layify the text from a summary, or vice versa. I have already tried implementing this, but have not yet figured out how.
 
 ### Feature: Persistent Popups
 
-4. QOL. When closing a tab and reopening, stores previous text popups and can redisplay them.
+5. QOL. When closing a tab and reopening, stores previous text popups and can redisplay them.
 
 ### Feature: Improved Visuals
 
-5. Graphic. Improve visuals using Tailwindcss or other means.
+6. Graphic. Improve visuals using Tailwindcss or other means.
 
 
 

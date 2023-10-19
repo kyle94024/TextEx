@@ -69,7 +69,7 @@ function createPopup(gptData: string, type: string) {
     windowContainer.style.position = 'absolute'
     windowContainer.style.width = '100%'
     windowContainer.style.top = '0'
-    windowContainer.style.height = '100%'
+    windowContainer.style.height = '5px'
     windowContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.0)' // transparent black color (was used for testing)
     windowContainer.style.zIndex = '9999' // Adjust the z-index to make sure it appears on top
 
@@ -89,20 +89,20 @@ function createPopup(gptData: string, type: string) {
     content.style.paddingTop = '1rem'
     draggableWindow.appendChild(content)
 
-    // Sets the height of the content until the scrollbar is needed
-    content.style.maxHeight = '25rem'
-    content.style.overflowY = 'auto'
-
     // Using information about the content, continues formatting draggable Window
 
     // Calculate the width of the draggable window based on the length of the content
     const contentLength = gptData.length
-    const remToAddW = Math.min(Math.floor(contentLength / 100), 15) // Add one rem every 100 characters, up to a max of 25
-    draggableWindow.style.width = 15 + remToAddW + 'rem'
+    const remToAddW = Math.min(Math.floor(contentLength / 4), 15 * 20) // Add one rem every 100 characters, up to a max of 25
+    draggableWindow.style.width = 15 * 20 + remToAddW + 'px'
 
     // Calculate the height of the draggable window based on the length of the content
-    const remToAddH = Math.min(Math.floor(contentLength / 30), 20) // Add one rem every 15 characters, up to a max of 20
-    draggableWindow.style.height = 6 + remToAddH + 'rem'
+    const remToAddH = Math.min(Math.floor(contentLength / 1.5), 23 * 20) // Add one rem every 15 characters, up to a max of 20
+    draggableWindow.style.height = 3 * 20 + remToAddH + 'px'
+
+    // Sets the height of the content until the scrollbar is needed
+    content.style.maxHeight = 3 * 16 + remToAddH + 'px'
+    content.style.overflowY = 'auto'
 
     // Finish formatting draggable window
     if (type === 'layify') {
@@ -198,6 +198,7 @@ function createPopup(gptData: string, type: string) {
     // })
     // }
     // Add event listener for the close button
+
     closeButton.addEventListener('click', () => {
       windowContainer.removeChild(draggableWindow)
     })
@@ -206,8 +207,8 @@ function createPopup(gptData: string, type: string) {
     minimizeButton.addEventListener('click', () => {
       // Toggle the height of the draggable window
       if (draggableWindow.style.height === '2rem') {
-        draggableWindow.style.height = 6 + remToAddH + 'rem'
-        draggableWindow.style.width = 15 + remToAddW + 'rem'
+        draggableWindow.style.width = 15 * 20 + remToAddW + 'px'
+        draggableWindow.style.height = 3 * 20 + remToAddH + 'px'
         content.style.display = 'block'
       } else {
         //const remToAddH = Math.min(Math.floor(contentLength / 30), 20) // Add one rem every 15 characters, up to a max of 20
@@ -261,7 +262,7 @@ function createPopup(gptData: string, type: string) {
 // }
 
 // Takes in the target element, and sets the z index of the target element to 9999, and subtracts 1 from every other draggable element
-// This makes sure that the target element is on top of every other draggable element
+// This makes sure that the target element is on top of every other draggable element, good for overlapping elements
 function setZIndex(target: HTMLElement) {
   target.style.zIndex = '9999'
   const windowContainer = target.parentElement as HTMLElement // Get the parent element (window container)
