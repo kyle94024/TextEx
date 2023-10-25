@@ -51,6 +51,20 @@ document.addEventListener('mousemove', (event) => {
   //console.log(`Mouse position: (${mouseX}, ${mouseY})`)
 })
 
+document.addEventListener('mouseup', (event) => {
+
+  if (window.getSelection()){
+    var textselect = document.createElement("div");
+    textselect.style.position = "absolute";
+    textselect.style.bottom = String(event.clientY) + "px";
+    console.log(event.pageY);
+    textselect.style.fontSize = "2vh";
+    textselect.innerText = "Click to Summarize";
+    document.body.appendChild(textselect);
+  }
+  //console.log(`Mouse position: (${mouseX}, ${mouseY})`)
+})
+
 // track the viewport position relative to the document
 let viewportX = window.scrollX
 let viewportY = window.scrollY
