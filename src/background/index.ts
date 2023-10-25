@@ -78,4 +78,28 @@ async function processMenuClick(
   }
 }
 
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log('Message received by background.js', request)
+  switch (request.message) {
+    case 'summarize':
+      ;(async () => {
+        const text = await gpt_api(SUMMARIZE_PROMPT, request.text)
+        console.log('sending data', text)
+        sendResponse(text)
+      })()
+      break
+    case 'layify':
+      ;(async () => {
+        const text2 = await gpt_api(LAYIFY_PROMPT, request.text)
+        console.log('sending data', text2)
+        sendResponse(text2)
+      })()
+      break
+    default:
+      console.error('Invalid message passed to background.js', request.message)
+      return false
+  }
+  return true
+})
+
 export {}
