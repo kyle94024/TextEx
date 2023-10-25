@@ -24,7 +24,7 @@ To launch TextEx, follow these steps:
 1. Clone the repository to your local machine.
 2. Navigate to the `textex` directory.
 3. Run the command `npm install` to install the necessary dependencies.
-4. Run the command `npm run dev` to create build folder.
+4. Run the command `npm run dev` to start the extension and create build folder.
 5. To use TextEx as a Chrome extension, set your Chrome browser to 'Developer mode', click 'Load unpacked', and select the `textex/build` folder.
 
 ## Table of Contents
