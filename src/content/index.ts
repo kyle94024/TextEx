@@ -51,20 +51,6 @@ document.addEventListener('mousemove', (event) => {
   //console.log(`Mouse position: (${mouseX}, ${mouseY})`)
 })
 
-document.addEventListener('mouseup', (event) => {
-
-  if (window.getSelection()){
-    var textselect = document.createElement("div");
-    textselect.style.position = "absolute";
-    textselect.style.bottom = String(event.clientY) + "px";
-    console.log(event.pageY);
-    textselect.style.fontSize = "2vh";
-    textselect.innerText = "Click to Summarize";
-    document.body.appendChild(textselect);
-  }
-  //console.log(`Mouse position: (${mouseX}, ${mouseY})`)
-})
-
 // track the viewport position relative to the document
 let viewportX = window.scrollX
 let viewportY = window.scrollY
@@ -292,3 +278,48 @@ function setZIndex(target: HTMLElement) {
     }
   }
 }
+
+document.addEventListener('mouseup', (event) => {
+  if (window.getSelection() && window.getSelection().toString()){
+    var textselect = document.createElement("div");
+    textselect.style.position = "fixed";
+    const content = window.getSelection().toString();
+    const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    textselect.style.bottom = String(vh - mouseY) + "px";
+    textselect.style.left = String(mouseX) + "px";
+    textselect.style.zIndex = "9999";
+    textselect.style.fontSize = "1vh";
+    textselect.innerText = "Click to Summarize";
+    textselect.style.color = "#FFF"
+    textselect.style.background = "rgba(0,0,0,0.5)";
+    textselect.style.borderRadius = "1vh";
+    textselect.style.padding = "0.5vh";
+    textselect.setAttribute("id", "summarizeFloater");
+    textselect.style.cursor = "pointer";
+    textselect.style.textDecoration = "underline";
+    textselect.addEventListener('click', () => {
+      console.log(content);
+      // chrome.runtime.sendMessage({text: content}).then(result => console.log(result))
+      (async () => {
+        const response = await chrome.runtime.sendMessage({text: content});
+        createPopup(response["text"], "summarize");
+        const element = document.querySelector("#summarizeFloater");
+        element.remove()
+      })();
+    })
+    console.log(window.getSelection().toString());
+    document.body.appendChild(textselect);
+  }
+  //console.log(`Mouse position: (${mouseX}, ${mouseY})`)
+})
+document.addEventListener('click', function(event){
+  const element = document.querySelector("#summarizeFloater");
+  const x = event.target
+  if (!window.getSelection() || !window.getSelection().toString()){
+  if (!element?.contains((<HTMLElement> event.target))){
+    element.remove();
+    // console.log("Test")
+  }
+}
+})
