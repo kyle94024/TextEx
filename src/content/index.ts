@@ -303,8 +303,6 @@ document.addEventListener('mouseup', (event) => {
     textselect.style.cursor = "pointer";
     textselect.style.textDecoration = "underline";
     textselect.addEventListener('click', () => {
-      console.log(content);
-      // chrome.runtime.sendMessage({text: content}).then(result => console.log(result))
       (async () => {
         const response = await chrome.runtime.sendMessage({text: content});
         createPopup(response["text"], "summarize");
@@ -317,7 +315,6 @@ document.addEventListener('mouseup', (event) => {
     console.log(window.getSelection().toString());
     document.body.appendChild(textselect);
   }
-  //console.log(`Mouse position: (${mouseX}, ${mouseY})`)
 })
 document.addEventListener('click', function(event){
   if (!window.getSelection() || !window.getSelection().toString()){
