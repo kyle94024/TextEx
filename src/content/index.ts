@@ -304,22 +304,22 @@ document.addEventListener('mouseup', (event) => {
       (async () => {
         const response = await chrome.runtime.sendMessage({text: content});
         createPopup(response["text"], "summarize");
-        const element = document.querySelector("#summarizeFloater");
-        element.remove()
       })();
     })
+    while (document.querySelector("#summarizeFloater")){
+      const element = document.querySelector("#summarizeFloater");
+      element.remove()
+    }
     console.log(window.getSelection().toString());
     document.body.appendChild(textselect);
   }
   //console.log(`Mouse position: (${mouseX}, ${mouseY})`)
 })
 document.addEventListener('click', function(event){
-  const element = document.querySelector("#summarizeFloater");
-  const x = event.target
   if (!window.getSelection() || !window.getSelection().toString()){
-  if (!element?.contains((<HTMLElement> event.target))){
-    element.remove();
-    // console.log("Test")
+  while (document.querySelector("#summarizeFloater")){
+    const element = document.querySelector("#summarizeFloater");
+    element.remove()
   }
-}
+  }
 })
