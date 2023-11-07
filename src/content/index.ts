@@ -45,9 +45,13 @@ import interact from 'interactjs'
 // track the mouse position relative to the viewport
 let mouseX = 0
 let mouseY = 0
+let relativeMouseX = 0
+let relativeMouseY = 0
 document.addEventListener('mousemove', (event) => {
   mouseX = event.clientX
   mouseY = event.clientY
+  relativeMouseX = event.pageX
+  relativeMouseY = event.pageY
   //console.log(`Mouse position: (${mouseX}, ${mouseY})`)
 })
 
@@ -282,12 +286,12 @@ function setZIndex(target: HTMLElement) {
 document.addEventListener('mouseup', (event) => {
   if (window.getSelection() && window.getSelection().toString()){
     var textselect = document.createElement("div");
-    textselect.style.position = "fixed";
+    textselect.style.position = "absolute";
     const content = window.getSelection().toString();
     const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
     const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-    textselect.style.bottom = String(vh - mouseY) + "px";
-    textselect.style.left = String(mouseX) + "px";
+    textselect.style.bottom = String(vh - relativeMouseY) + "px";
+    textselect.style.left = String(relativeMouseX) + "px";
     textselect.style.zIndex = "9999";
     textselect.style.fontSize = "1vh";
     textselect.innerText = "Click to Summarize";
