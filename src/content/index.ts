@@ -287,20 +287,31 @@ document.addEventListener('mouseup', (event) => {
   if (window.getSelection() && window.getSelection().toString()){
     var textselect = document.createElement("div");
     textselect.style.position = "absolute";
+    // Highlighted text selection
     const content = window.getSelection().toString();
+    // Window info for positioning
     const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
     const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
     textselect.style.bottom = String(vh - relativeMouseY) + "px";
     textselect.style.left = String(relativeMouseX) + "px";
     textselect.style.zIndex = "9999";
+    // Relative font scaling
     textselect.style.fontSize = "1vh";
+    // Button text content
     textselect.innerText = "Click to Summarize";
+    // Solid white text color
     textselect.style.color = "#FFF"
+    // Semi-Transparent rgba background. Not supported on a handful of browsers
     textselect.style.background = "rgba(0,0,0,0.5)";
+    // Border radius for rounded edges
     textselect.style.borderRadius = "1vh";
+    // Scaling border padding 
     textselect.style.padding = "0.5vh";
+    // Floating button id
     textselect.setAttribute("id", "summarizeFloater");
+    // Add "clickable" cursor
     textselect.style.cursor = "pointer";
+    // Underline button text
     textselect.style.textDecoration = "underline";
     textselect.addEventListener('click', () => {
       (async () => {
@@ -312,15 +323,16 @@ document.addEventListener('mouseup', (event) => {
       const element = document.querySelector("#summarizeFloater");
       element.remove()
     }
-    console.log(window.getSelection().toString());
     document.body.appendChild(textselect);
   }
 })
+// Click event listener for deleting floating button(s) on unhighlighted click
 document.addEventListener('click', function(event){
   if (!window.getSelection() || !window.getSelection().toString()){
-  while (document.querySelector("#summarizeFloater")){
-    const element = document.querySelector("#summarizeFloater");
-    element.remove()
-  }
+    // Delete all summarizeFloater elements
+    while (document.querySelector("#summarizeFloater")){
+      const element = document.querySelector("#summarizeFloater");
+      element.remove();
+    }
   }
 })
