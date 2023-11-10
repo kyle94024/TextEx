@@ -141,8 +141,8 @@ function createPopup(gptData: string, type: string) {
     closeButton.style.paddingTop = '1px'
 
     // Add the close button text
-    const closeButtonText = document.createElement('p')
-    closeButtonText.textContent = 'X'
+    const closeButtonText = document.createElement('p');
+    closeButtonText.textContent = '×';
     closeButtonText.style.color = 'red'
     closeButtonText.style.fontSize = '10px'
     closeButtonText.style.fontWeight = 'bold'
