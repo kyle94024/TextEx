@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import Draggable from 'react-draggable';
+import "../../styles.css";
 
 function DraggablePopup({ gptData, type, onClose, onLayify }) {
   const [minimized, setMinimized] = useState(false);
@@ -19,6 +20,7 @@ function DraggablePopup({ gptData, type, onClose, onLayify }) {
   // Styling can be derived from the original code
 
   return (
+    <div style={{zIndex: '9999', top: 0, position: "absolute"}} className='bg-red'>
     <Draggable nodeRef={popupRef}>
       <div ref={popupRef} /* Additional styling here */>
         {/* Close Button */}
@@ -34,6 +36,7 @@ function DraggablePopup({ gptData, type, onClose, onLayify }) {
         {!minimized && <p>{gptData}</p>}
       </div>
     </Draggable>
+    </div>
   );
 }
 
