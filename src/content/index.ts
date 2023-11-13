@@ -5,6 +5,93 @@ import { LAYIFY_PROMPT } from '../background/gpt/prompts/lay-ify'
 // This file contains the content script that is injected into the page (the DOM).
 // It listens for messages from the extension and creates the draggable window/popup.
 
+
+function sendMessageToBackground(message) {
+  return new Promise((resolve, reject) => {
+    const port = chrome.runtime.connect({ name: 'content-script' });
+
+    // Listen for the response from the background script
+    port.onMessage.addListener(function (response) {
+      // Clean up the port
+      port.disconnect();
+
+      if (chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError);
+      } else {
+        resolve(response);
+      }
+    });
+
+    // Send the message to the background script
+    port.postMessage(message);
+  });
+}
+
+
+let button = null;
+
+document.addEventListener('mouseup', function (event) {
+  const selectedText = window.getSelection().toString();
+  if (selectedText.length > 0) {
+    const mouseX = event.pageX;
+    const mouseY = event.pageY;
+
+    if (!button) {
+      // Create the button if it doesn't exist
+      button = document.createElement('button');
+      button.innerHTML = 'Summarize';
+      button.style.position = 'absolute';
+      button.style.left = mouseX + 'px';
+      button.style.top = mouseY + 'px';
+
+      button.addEventListener('click', async function () {
+        try {
+          // Send message to the background script
+          const response = await sendMessageToBackground({
+            action: 'callGPTAPI',
+            data: { message: 'summarize', text: window.getSelection().toString() },
+          });
+
+          // Handle the response
+          console.log(response);
+          createPopup(response.toString(), 'summarize');
+
+        } catch (error) {
+          console.error('An error occurred:', error);
+        }
+      });
+
+      button.style.padding = '5px 10px';
+      button.style.fontSize = '14px';
+      button.style.backgroundColor = '#e74c3c'; /* Dark background color */
+      button.style.color = '#ecf0f1'; /* Light text color */
+      button.style.border = 'none';
+      button.style.borderRadius = '5px';
+      button.style.cursor = 'pointer';
+      button.style.transition = 'background-color 0.3s ease';
+
+      // Append the button to the page
+      document.body.appendChild(button);
+    }
+
+  } else if (button) {
+    // Remove the button if text is not selected
+    document.body.removeChild(button);
+    button = null;
+  }
+});
+
+
+// Add an additional event listener to remove the button if the user clicks outside of the button
+document.addEventListener('mousedown', function (event) {
+  if (button && !button.contains(event.target)) {
+    document.body.removeChild(button);
+    button = null;
+  }
+});
+
+
+
 // track the number of popups created
 let numberOfPopupsCreated = 0
 
