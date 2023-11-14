@@ -100,4 +100,25 @@ async function processMenuClick(
   }
 }
 
-export { }
+// chrome.runtime.onMessage.addListener(messageReceived);
+
+// async function messageReceived(msg) {
+//   var text = await gpt_api(SUMMARIZE_PROMPT, msg);
+// }
+
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    gpt_api(SUMMARIZE_PROMPT, request["text"]).then(output => {
+      sendResponse({text: output});
+    })
+    return true
+  }
+);
+// chrome.runtime.onMessage.addListener(
+//   async function(request, sender, sendResponse) {
+//     await gpt_api(SUMMARIZE_PROMPT, request.text).then(result => sendResponse(result))
+//   }
+// );
+
+export {}

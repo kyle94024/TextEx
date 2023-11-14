@@ -132,9 +132,13 @@ import interact from 'interactjs'
 // track the mouse position relative to the viewport
 let mouseX = 0
 let mouseY = 0
+let relativeMouseX = 0
+let relativeMouseY = 0
 document.addEventListener('mousemove', (event) => {
   mouseX = event.clientX
   mouseY = event.clientY
+  relativeMouseX = event.pageX
+  relativeMouseY = event.pageY
   //console.log(`Mouse position: (${mouseX}, ${mouseY})`)
 })
 
@@ -224,8 +228,8 @@ function createPopup(gptData: string, type: string) {
     closeButton.style.paddingTop = '1px'
 
     // Add the close button text
-    const closeButtonText = document.createElement('p')
-    closeButtonText.textContent = 'X'
+    const closeButtonText = document.createElement('p');
+    closeButtonText.textContent = '×';
     closeButtonText.style.color = 'red'
     closeButtonText.style.fontSize = '10px'
     closeButtonText.style.fontWeight = 'bold'
@@ -365,3 +369,57 @@ function setZIndex(target: HTMLElement) {
     }
   }
 }
+
+document.addEventListener('mouseup', (event) => {
+  if (window.getSelection() && window.getSelection().toString()){
+    var textselect = document.createElement("div");
+    textselect.style.position = "absolute";
+    // Highlighted text selection
+    const content = window.getSelection().toString();
+    // Window info for positioning
+    const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    textselect.style.bottom = String(vh - relativeMouseY) + "px";
+    textselect.style.left = String(relativeMouseX) + "px";
+    textselect.style.zIndex = "9999";
+    // Relative font scaling
+    textselect.style.fontSize = "1vh";
+    // Button text content
+    textselect.innerText = "Click to Summarize";
+    // Solid white text color
+    textselect.style.color = "#FFF"
+    // Semi-Transparent rgba background. Not supported on a handful of browsers
+    textselect.style.background = "rgba(0,0,0,0.5)";
+    // Border radius for rounded edges
+    textselect.style.borderRadius = "1vh";
+    // Scaling border padding 
+    textselect.style.padding = "0.5vh";
+    // Floating button id
+    textselect.setAttribute("id", "summarizeFloater");
+    // Add "clickable" cursor
+    textselect.style.cursor = "pointer";
+    // Underline button text
+    textselect.style.textDecoration = "underline";
+    textselect.addEventListener('click', () => {
+      (async () => {
+        const response = await chrome.runtime.sendMessage({text: content});
+        createPopup(response["text"], "summarize");
+      })();
+    })
+    while (document.querySelector("#summarizeFloater")){
+      const element = document.querySelector("#summarizeFloater");
+      element.remove()
+    }
+    document.body.appendChild(textselect);
+  }
+})
+// Click event listener for deleting floating button(s) on unhighlighted click
+document.addEventListener('click', function(event){
+  if (!window.getSelection() || !window.getSelection().toString()){
+    // Delete all summarizeFloater elements
+    while (document.querySelector("#summarizeFloater")){
+      const element = document.querySelector("#summarizeFloater");
+      element.remove();
+    }
+  }
+})
