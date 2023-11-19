@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react'
 import Draggable from 'react-draggable'
-import '../style.css'
 import '@assets/css/tailwind.css'
 
 function DraggablePopup({ gptData, type, onClose, onLayify }) {
