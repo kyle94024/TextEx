@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
+    "types": ["vite/client", "node", "chrome"],
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
@@ -14,8 +15,15 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@assets/*": ["src/assets/*"],
+      "@background/*": ["src/background/*"],
+      "@content/*": ["src/content/*"]
+    }
   },
-  "include": ["src","package.json"],
+  "include": ["src", "package.json"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
