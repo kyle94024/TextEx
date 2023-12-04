@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client'
 import tailwindUrl from '@assets/css/tailwind.css?inline'
 import '@assets/css/tailwind.css'
 
-export function injectComponent() {
+export function injectComponent(type, gptData) {
   const shadowHost = document.createElement('div')
   shadowHost.setAttribute('id', 'textExShadowHost')
   document.body.appendChild(shadowHost)
@@ -23,13 +23,14 @@ export function injectComponent() {
   const root = createRoot(shadowRoot)
   console.log('Root component injected at', shadowRoot)
 
+  // set the roots selector to intitial
+
   root.render(
     <React.StrictMode>
-      {/* <link rel = "stylesheet" href={tailwindUrl} /> */}
       <DraggablePopup
-        gptData="Your content here"
-        type="summarize"
-        onClose={() => console.log('Close')}
+        gptData={gptData}
+        type={type}
+        onClose={(event) => event.target.parentElement.remove()}
         // onLayify={/* your logic here */}
         onLayify={() => console.log('Layify')}
       />
