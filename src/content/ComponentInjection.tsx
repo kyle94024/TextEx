@@ -4,7 +4,37 @@ import { createRoot } from 'react-dom/client'
 import tailwindUrl from '@assets/css/tailwind.css?inline'
 import '@assets/css/tailwind.css'
 
+
+
+
+
+
+let mouseX = 0
+let mouseY = 0
+let relativeMouseX = 0
+let relativeMouseY = 0
+document.addEventListener('mousemove', (event) => {
+  mouseX = event.clientX
+  mouseY = event.clientY
+  relativeMouseX = event.pageX
+  relativeMouseY = event.pageY
+  //console.log(`Mouse position: (${mouseX}, ${mouseY})`)
+})
+
+let viewportX = window.scrollX
+let viewportY = window.scrollY
+window.addEventListener('scroll', () => {
+  viewportX = window.scrollX
+  viewportY = window.scrollY
+  //console.log(`Viewport position: (${viewportX}, ${viewportY})`)
+})
+
+
+
+
+
 export function injectComponent(type, gptData) {
+  console.log(mouseX, mouseY, relativeMouseX, relativeMouseY)
   const shadowHost = document.createElement('div')
   shadowHost.setAttribute('id', 'textExShadowHost')
   document.body.appendChild(shadowHost)
@@ -24,6 +54,7 @@ export function injectComponent(type, gptData) {
   console.log('Root component injected at', shadowRoot)
 
   // set the roots selector to intitial
+  console.log("enter: ",mouseX + viewportX, mouseY + viewportY)
 
   root.render(
     <React.StrictMode>
@@ -33,6 +64,8 @@ export function injectComponent(type, gptData) {
         onClose={(event) => event.target.parentElement.remove()}
         // onLayify={/* your logic here */}
         onLayify={() => console.log('Layify')}
+        posX={mouseX + viewportX}
+        posY={mouseY + viewportY}
       />
     </React.StrictMode>,
   )

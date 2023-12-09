@@ -2,9 +2,56 @@ import React, { useState, useRef } from 'react'
 import Draggable from 'react-draggable'
 import '@assets/css/tailwind.css'
 
-function DraggablePopup({gptData, type, onClose, onLayify }) {
+var highestZIndex = 9999;
+function findHighestZIndex(elem)
+{
+  highestZIndex += 1;
+  return highestZIndex;
+}
+
+export function sendMessageToBackground(message) {
+  return new Promise((resolve, reject) => {
+    const port = chrome.runtime.connect({ name: 'content-script' })
+
+    // Listen for the response from the background script
+    port.onMessage.addListener(function (response) {
+      // Clean up the port
+      port.disconnect()
+
+      if (chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError)
+      } else {
+        resolve(response)
+      }
+    })
+
+    // Send the message to the background script
+    port.postMessage(message)
+  })
+}
+
+
+function DraggablePopup({gptData, type, onClose, onLayify , posX, posY}) {
   const [minimized, setMinimized] = useState(false)
   const popupRef = useRef(null)
+
+  // TYPE CHECKING
+  var bgColor = null
+  var borderColor = null
+
+  if (type === 'summarize') {
+    console.log('Summarize')
+    bgColor = 'bg-red-200'
+    borderColor = 'border-red-500'
+  } else if (type === 'layify') {
+    console.log('Layify')
+    bgColor = 'bg-green-200'
+    borderColor = 'border-green-500'
+  } 
+
+  console.log(`colors: `,`border ${bgColor} ${borderColor} rounded-md shadow-md`)
+
+  // sendMessageToBackground("hello from content script")
 
   const handleMinimize = (event) => {
     //changes the dimension of the popup to make it smaller
@@ -38,19 +85,23 @@ function DraggablePopup({gptData, type, onClose, onLayify }) {
     }
   }
 
-  // Styling can be derived from the original code
 
+  // Styling can be derived from the original code
+  console.log("pos: ",posX, posY)
   return (
     <div
-      style={{ zIndex: '9999', top: 0, position: 'absolute'}}
+      style={{ zIndex: '9999', position: 'absolute', top: `${posY-25}px`, left: `${posX-100}px`, width: '0px', height: '0px' }}
+      onMouseDown = {(event) => {event.currentTarget.style.zIndex = (findHighestZIndex("*") + 1).toString()}}
     >
+      
       <Draggable 
         nodeRef={popupRef}
+        
         //style this
         >
         <div ref={popupRef} 
-          className="bg-white border border-gray-300 rounded-md shadow-md"
-          style={{ width: '400px', height: '300px' }}
+          className="bg-white border border-gray-300 rounded-md shadow-lg"
+          style={{ width: '400px', height: '300px'}}
         >
 
           {/* Close Button */}
@@ -73,7 +124,7 @@ function DraggablePopup({gptData, type, onClose, onLayify }) {
           <div
             id = "heading"
             style={{ position: "relative", top: "0px", height: "50px", zIndex: "10003"}}
-            className= "border border-red-500 bg-red-200 rounded-md shadow-md"
+            className= {`border ${bgColor} ${borderColor} rounded-md shadow-md`}
           >
           </div>
 
@@ -95,4 +146,4 @@ function DraggablePopup({gptData, type, onClose, onLayify }) {
   )
 }
 
-export default DraggablePopup
+export default DraggablePopup; sendMessageToBackground

@@ -7,6 +7,43 @@ import { gpt_api } from './gpt/api'
 import { SUMMARIZE_PROMPT } from './gpt/prompts/summarize'
 import { LAYIFY_PROMPT } from './gpt/prompts/lay-ify'
 
+chrome.runtime.onConnect.addListener(function (port) {
+  port.onMessage.addListener(async function (msg) {
+    console.log('message received in background script:', msg)
+    if (msg.action === 'callGPTAPI') {
+      if (msg.data.message === 'summarize') {
+        try {
+          // Perform the GPT API call
+          const result = await gpt_api(SUMMARIZE_PROMPT, msg.data.text)
+
+          // Send the result back to the content script
+          console.log(result)
+          port.postMessage(result)
+        } catch (error) {
+          // Handle errors if needed
+          console.error('Error in background script:', error)
+          port.postMessage({ error: 'An error occurred' })
+        }
+      }
+
+      if (msg.data.message === 'layify') {
+        try {
+          // Perform the GPT API call
+          const result = await gpt_api(LAYIFY_PROMPT, msg.data.text)
+
+          // Send the result back to the content script
+          console.log(result)
+          port.postMessage(result)
+        } catch (error) {
+          // Handle errors if needed
+          console.error('Error in background script:', error)
+          port.postMessage({ error: 'An error occurred' })
+        }
+      }
+    }
+  })
+})
+
 // Disconnect and reinject content script on install (for dev purposes)
 chrome.runtime.onInstalled.addListener(async () => {
   for (const cs of chrome.runtime.getManifest().content_scripts) {
