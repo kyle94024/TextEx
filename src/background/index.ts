@@ -7,6 +7,12 @@ import { gpt_api } from './gpt/api'
 import { SUMMARIZE_PROMPT } from './gpt/prompts/summarize'
 import { LAYIFY_PROMPT } from './gpt/prompts/lay-ify'
 
+
+// Sets up a port between the background script and the content script
+// Listens for messages from the content script asking to call the GPT API for summarization or layification
+// The appropriate GPT API call is made based on the received message, and the result is sent back to the content script
+// All this takes place in the background script to ensure that no important information is exposed through the content script
+
 chrome.runtime.onConnect.addListener(function (port) {
   port.onMessage.addListener(async function (msg) {
     console.log('message received in background script:', msg)
