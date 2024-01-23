@@ -17,6 +17,9 @@ TextEx is built using the following technologies:
 
 TextEx is a Chrome extension tool that allows users to understand any text using the "Lay-ify" and "Summary" tools. The aim of the project is to provide laypersons a powerful and flexible tool to understand jargon-filled and expert-level text easily, whether for personal or professional use.
 
+## NOTE: REPLACEMENT API KEY NEEDED
+To run TextEx, you must first navigate to src/background/gpt/api.ts, and replace the string following "apiKey" with your own openAI API key. Please email me at kyle94024@gmail.com to request access to one of my private api keys.
+
 ## Launch<a name="launch"></a>
 
 To launch TextEx, follow these steps:
